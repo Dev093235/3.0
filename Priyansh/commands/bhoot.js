@@ -1,53 +1,65 @@
 module.exports.config = {
-  name: "bhoot",  // बिना prefix के ये नाम यूजर बोलेगा तो कमांड trigger होगी
-  version: "1.0.0",
+  name: "bhoot",
+  version: "1.1.3",
   hasPermssion: 0,
   credits: "Rudra",
-  description: "Send scary bhoot video & message when user says bhoot without prefix",
+  description: "Scary ghost command with anime videos",
   commandCategory: "fun",
   usages: "bhoot",
   cooldowns: 5
 };
 
-module.exports.run = async function({ api, event }) {
-  const input = event.body.toLowerCase();
+module.exports.run = async function ({ api, event }) {
+  const msg = event.body.toLowerCase();
+  const triggerWords = ["bhoot", "भूत", "bhootni", "radha", "राधा"];
+  if (!triggerWords.some(word => msg.includes(word))) return;
 
-  // bhoot के कई spelling वेरिएशन चेक कर
-  if (!/(bhoot+|bhut+|bhot+)/.test(input)) {
-    return api.sendMessage("😅 थोड़ा सही 'bhoot' बोलो यार!", event.threadID, event.messageID);
-  }
-
-  const scaryMessages = [
-    "😱 पीछे मुड़कर मत देखना... भूत आ गया!",
-    "👻 तुम्हारे पीछे कुछ है... आवाज़ सुनाई दे रही है?",
-    "😨 दरवाज़े के पीछे कोई खड़ा है... डरो मत!",
-    "👀 रात के 3 बजे का वक्त है... अजीब आवाज़ें आ रही हैं!",
-    "😵 दरवाज़े की खटखट सुनाई दी? भूत हो सकता है!",
-    "😰 अंधेरा बढ़ रहा है... कुछ छुपा हुआ है!",
-    "💀 ये आवाज़ें सिर्फ तुम्हारे लिए हैं... संभल जाओ!",
-    "🧟‍♂️ छुप छुप के कोई देख रहा है तुम्हें...",
-    "😳 खिड़की से कोई झांक रहा है... संभल के!",
-    "👹 आज रात बुरा सपना आएगा... भूत तुम्हारे पीछे है!"
+  const replies = [
+    "😱 किसने बोला भूत? तेरे पीछे आ गया!",
+    "👻 दरवाजा मत खोलना… अंदर भूत है!",
+    "💀 आज रात नींद नहीं आएगी!",
+    "😨 पीछे मत देख, कुछ है वहाँ!",
+    "😈 राधा ने पुकारा… और मैं आ गया!",
+    "👀 तू डर गया? अभी तो trailer है!",
+    "🥶 भूत दिखा क्या? असली वाला!",
+    "🫣 लाइट बंद कर… आवाज़ सुन रहा है?",
+    "😰 तेरा नाम लिया था न भूत ने!",
+    "🌕 Poornima ki raat... perfect time!",
+    "🔪 Ab bhag tu... late ho गया!",
+    "💤 Sote waqt aankh khuli mat rakhna!",
+    "😵 Tu akele room me hai न? Bad luck!",
+    "🙀 Yeh awaaz tujhe hi sunai di thi na?",
+    "🪞 Mirror me dekha kya? Wahi tha!",
+    "🪦 Tera naam likha hai grave pe!",
+    "☠️ Chill kar... ya main chalaa aunga!",
+    "😵‍💫 Bhool ja Radha ko... warna main nahi!",
+    "🕸️ Kya tujhe feel hua... koi saans le raha tha?",
+    "😬 Ab tujhe koi nahi bacha सकता!"
   ];
 
-  const videoLinks = [
-    "https://i.imgur.com/xFiFevS.mp4",
-    "https://i.imgur.com/5yt8Tru.mp4",
-    "https://i.imgur.com/HvMcGpM.mp4",
-    "https://i.imgur.com/nHgvkQa.mp4",
-    "https://i.imgur.com/8txdfUp.mp4",
-    "https://i.imgur.com/M0i0aGp.mp4",
-    "https://i.imgur.com/tvYuyXk.mp4",
-    "https://i.imgur.com/bBWfgHg.mp4",
-    "https://i.imgur.com/Ci0MgBx.mp4",
-    "https://i.imgur.com/XRw6YIl.mp4"
+  const media = [
+    "https://i.imgur.com/kLJzHgD.mp4", "https://i.imgur.com/bYxykoU.mp4",
+    "https://i.imgur.com/qW3FG4K.mp4", "https://i.imgur.com/X8kYVjY.mp4",
+    "https://i.imgur.com/2nRQphx.mp4", "https://i.imgur.com/vZdPtCg.jpg",
+    "https://i.imgur.com/YXq5Syx.jpg", "https://i.imgur.com/EktbHZb.jpg",
+    "https://i.imgur.com/5v5AEmT.jpg", "https://i.imgur.com/eo1vIR3.jpg",
+    "https://i.imgur.com/nE9hZyn.mp4", "https://i.imgur.com/gdrkRG6.jpg",
+    "https://i.imgur.com/Q5Gvjhv.mp4", "https://i.imgur.com/BRi8W7P.jpg",
+    "https://i.imgur.com/H0UgyZw.mp4", "https://i.imgur.com/j3Lb12R.jpg",
+    "https://i.imgur.com/oyjJ8zT.mp4", "https://i.imgur.com/f3ZmNSM.jpg",
+    "https://i.imgur.com/2HxvMXZ.jpg", "https://i.imgur.com/NtIguvi.mp4"
   ];
 
-  const randomMsg = scaryMessages[Math.floor(Math.random() * scaryMessages.length)];
-  const randomVideo = videoLinks[Math.floor(Math.random() * videoLinks.length)];
+  const line = replies[Math.floor(Math.random() * replies.length)];
+  const randomMedia = media[Math.floor(Math.random() * media.length)];
+  const isVideo = randomMedia.endsWith(".mp4");
 
-  return api.sendMessage({
-    body: randomMsg,
-    attachment: await global.utils.getStreamFromURL(randomVideo)
-  }, event.threadID, event.messageID);
+  api.sendMessage(line, event.threadID, () => {
+    setTimeout(async () => {
+      return api.sendMessage({
+        body: isVideo ? "📽️ लो अब डर भी वीडियो में आएगा!" : "📸 बाप रे! देख ले अब 😂",
+        attachment: await global.utils.getStreamFromURL(randomMedia)
+      }, event.threadID, event.messageID);
+    }, 1500);
+  });
 };

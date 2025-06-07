@@ -61,7 +61,7 @@ function borderStyle1(text) {
 
 module.exports.run = async function({ api, event }) {
   const msg = event.body.toLowerCase();
-  const triggers = ["bhoot", "ghost", "भूत"];
+  const triggers = ["bhoot", "bhut", "भूत"];
   if (!triggers.some(w => msg.includes(w))) return;
 
   const reply = replies[Math.floor(Math.random() * replies.length)];

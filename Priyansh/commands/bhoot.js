@@ -1,65 +1,79 @@
 module.exports.config = {
   name: "bhoot",
-  version: "1.1.3",
+  version: "1.0",
   hasPermssion: 0,
   credits: "Rudra",
-  description: "Scary ghost command with anime videos",
+  description: "Male ghost scary replies with videos",
   commandCategory: "fun",
-  usages: "bhoot",
   cooldowns: 5
 };
 
-module.exports.run = async function ({ api, event }) {
+const replies = [
+  "👻 तूने भूत का नाम लिया, अब छुप नहीं पाएगा! 💀",
+  "💀 भूत का शिकार बनने वाला है तू!",
+  "🕯️ भूत की दुनिया में तेरी एंट्री हो चुकी है!",
+  "👹 डर जा! भूत तेरे पीछे है!",
+  "😱 हवाओं में भूत की चीख़ सुन!",
+  "👻 भूत तेरे खून में बस चुका है!",
+  "🖤 तेरी रातें अब कभी शांत नहीं रहेंगी!",
+  "🔥 भूतनी के साथ भूत भी तेरे पीछे!",
+  "👽 अजीब साया तेरे साथ घूम रहा है!",
+  "💨 हवा में भूत की खुशबू आ रही है!",
+  "👁️‍🗨️ भूत तेरा पीछा नहीं छोड़ेंगे!",
+  "☠️ तेरी रूह का भूत बन गया है!",
+  "🧟‍♂️ भूत के क़दम तेरे घर तक आ चुके हैं!",
+  "👿 अब तेरे सपनों में भी भूत आएगा!",
+  "🌑 भूत की छाया तेरे आस-पास मंडराएगी!",
+  "🕸️ भूत की जाल में फंस चुका है तू!",
+  "🧛‍♂️ भूत का राज़ तेरे अंदर छुपा है!",
+  "⚰️ कब्र से उठे भूत की दहशत!",
+  "👹 भूत का गुस्सा अब तेरे सामने!",
+  "💀 तेरे खून में भूत की आग जल रही है!"
+];
+
+const media = [
+  "https://i.imgur.com/1b8d5YQ.mp4",
+  "https://i.imgur.com/5Rm8cRz.mp4",
+  "https://i.imgur.com/kGhZq6K.mp4",
+  "https://i.imgur.com/gT0BjYF.mp4",
+  "https://i.imgur.com/4sX6tC7.mp4",
+  "https://i.imgur.com/Zv6dGRf.mp4",
+  "https://i.imgur.com/W6YciZm.mp4",
+  "https://i.imgur.com/qJfQciY.mp4",
+  "https://i.imgur.com/NHd2xNV.mp4",
+  "https://i.imgur.com/R3rq4vY.mp4",
+  "https://i.imgur.com/C2nXpcy.mp4",
+  "https://i.imgur.com/7JGhvqM.mp4",
+  "https://i.imgur.com/oW1F7fi.mp4",
+  "https://i.imgur.com/3jLqzJh.mp4",
+  "https://i.imgur.com/F2OErqQ.mp4",
+  "https://i.imgur.com/YW5tJfw.mp4",
+  "https://i.imgur.com/ETZGTCV.mp4",
+  "https://i.imgur.com/XVjZtQi.mp4",
+  "https://i.imgur.com/9GO9fXk.mp4",
+  "https://i.imgur.com/FgJ7xqy.mp4"
+];
+
+function borderStyle1(text) {
+  const border = "═".repeat(text.length + 4);
+  return `╔${border}╗\n║  ${text}  ║\n╚${border}╝`;
+}
+
+module.exports.run = async function({ api, event }) {
   const msg = event.body.toLowerCase();
-  const triggerWords = ["bhoot", "भूत", "bhootni", "radha", "राधा"];
-  if (!triggerWords.some(word => msg.includes(word))) return;
+  const triggers = ["bhoot", "ghost", "भूत"];
+  if (!triggers.some(w => msg.includes(w))) return;
 
-  const replies = [
-    "😱 किसने बोला भूत? तेरे पीछे आ गया!",
-    "👻 दरवाजा मत खोलना… अंदर भूत है!",
-    "💀 आज रात नींद नहीं आएगी!",
-    "😨 पीछे मत देख, कुछ है वहाँ!",
-    "😈 राधा ने पुकारा… और मैं आ गया!",
-    "👀 तू डर गया? अभी तो trailer है!",
-    "🥶 भूत दिखा क्या? असली वाला!",
-    "🫣 लाइट बंद कर… आवाज़ सुन रहा है?",
-    "😰 तेरा नाम लिया था न भूत ने!",
-    "🌕 Poornima ki raat... perfect time!",
-    "🔪 Ab bhag tu... late ho गया!",
-    "💤 Sote waqt aankh khuli mat rakhna!",
-    "😵 Tu akele room me hai न? Bad luck!",
-    "🙀 Yeh awaaz tujhe hi sunai di thi na?",
-    "🪞 Mirror me dekha kya? Wahi tha!",
-    "🪦 Tera naam likha hai grave pe!",
-    "☠️ Chill kar... ya main chalaa aunga!",
-    "😵‍💫 Bhool ja Radha ko... warna main nahi!",
-    "🕸️ Kya tujhe feel hua... koi saans le raha tha?",
-    "😬 Ab tujhe koi nahi bacha सकता!"
-  ];
+  const reply = replies[Math.floor(Math.random() * replies.length)];
+  const video = media[Math.floor(Math.random() * media.length)];
+  const borderedReply = borderStyle1(reply);
 
-  const media = [
-    "https://i.imgur.com/kLJzHgD.mp4", "https://i.imgur.com/bYxykoU.mp4",
-    "https://i.imgur.com/qW3FG4K.mp4", "https://i.imgur.com/X8kYVjY.mp4",
-    "https://i.imgur.com/2nRQphx.mp4", "https://i.imgur.com/vZdPtCg.jpg",
-    "https://i.imgur.com/YXq5Syx.jpg", "https://i.imgur.com/EktbHZb.jpg",
-    "https://i.imgur.com/5v5AEmT.jpg", "https://i.imgur.com/eo1vIR3.jpg",
-    "https://i.imgur.com/nE9hZyn.mp4", "https://i.imgur.com/gdrkRG6.jpg",
-    "https://i.imgur.com/Q5Gvjhv.mp4", "https://i.imgur.com/BRi8W7P.jpg",
-    "https://i.imgur.com/H0UgyZw.mp4", "https://i.imgur.com/j3Lb12R.jpg",
-    "https://i.imgur.com/oyjJ8zT.mp4", "https://i.imgur.com/f3ZmNSM.jpg",
-    "https://i.imgur.com/2HxvMXZ.jpg", "https://i.imgur.com/NtIguvi.mp4"
-  ];
-
-  const line = replies[Math.floor(Math.random() * replies.length)];
-  const randomMedia = media[Math.floor(Math.random() * media.length)];
-  const isVideo = randomMedia.endsWith(".mp4");
-
-  api.sendMessage(line, event.threadID, () => {
-    setTimeout(async () => {
-      return api.sendMessage({
-        body: isVideo ? "📽️ लो अब डर भी वीडियो में आएगा!" : "📸 बाप रे! देख ले अब 😂",
-        attachment: await global.utils.getStreamFromURL(randomMedia)
-      }, event.threadID, event.messageID);
-    }, 1500);
+  api.sendMessage(borderedReply, event.threadID, () => {
+    setTimeout(() => {
+      api.sendMessage({
+        body: "👻 भूत का साक्षात्कार!",
+        attachment: global.utils.getStreamFromURL(video)
+      }, event.threadID);
+    }, 1200);
   });
 };

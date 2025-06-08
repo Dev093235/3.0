@@ -16,7 +16,7 @@ jobs:
     - name: Set up Node.js # Node.js का वातावरण सेट करें
       uses: actions/setup-node@v4
       with:
-        node-version: '20' # Node.js का वर्जन (तुम '18', '20', या '22' चुन सकते हो)
+        node-version: '18' # Node.js का वर्जन (तुम '18', '20', या '22' चुन सकते हो)
 
     - name: Install dependencies # package.json में लिस्टेड सभी लाइब्रेरीज़ इंस्टॉल करें
       run: npm install

@@ -4,10 +4,10 @@ const path = require("path");
 
 module.exports.config = {
   name: "bhutni",
-  version: "1.0",
+  version: "1.2",
   hasPermssion: 0,
   credits: "Rudra",
-  description: "Female ghost scary replies with video",
+  description: "भूतनी की वीडियो और डरावनी बात",
   commandCategory: "fun",
   cooldowns: 5
 };
@@ -18,24 +18,35 @@ const replies = [
   "😈 भूतनी तेरे सपनों में आने वाली है!",
   "🧟‍♀️ देख पीछे... भूतनी खड़ी है!",
   "🌑 अब तेरा सामना भूतनी से होगा!",
-  "💀 डर मत, ये तो बस शुरुआत है!",
-  "🩸 भूतनी तेरा नाम ले रही है...",
-  "🧙‍♀️ एक बार जो भूतनी देखे, फिर वापसी नहीं!",
-  "🕸️ तेरे चारों ओर सन्नाटा क्यों है?",
-  "👁️ देख... छाया चलती आ रही है!"
+  "🕯️ भूतनी की सांसें तेरे कानों में गूंज रही हैं!",
+  "💀 तुझे भूतनी पसंद है ना? अब भुगत!",
+  "👁️‍🗨️ भूतनी तेरे दिमाग में बैठ गई!",
+  "🔮 रात को खिड़की मत खोलना... भूतनी झाँकेगी!",
+  "🕷️ धीरे बोल... भूतनी सुन रही है!",
+  "😨 तेरी चीख अब सिर्फ भूतनी को सुनाई देगी!",
+  "🖤 अब तेरा पीछा नहीं छोड़ेगी वो!",
+  "👹 साया उसका तेरे साथ आ गया है!",
+  "🔥 तू जलेगा उसकी नज़र से!",
+  "⚰️ तेरी रूह अब उसके कब्ज़े में है!",
+  "🦴 डर का दूसरा नाम है भूतनी!",
+  "🔪 तेरे पीछे कोई चल रहा है... देख!",
+  "👣 वो हर कदम पे तेरे साथ है!",
+  "🌪️ भूतनी का तूफ़ान आया है!",
+  "😱 अब तेरा बचना नामुमकिन है!"
 ];
 
 const media = [
-  "https://i.imgur.com/NHd2xNV.mp4",
-  "https://i.imgur.com/W6YciZm.mp4",
-  "https://i.imgur.com/F2OErqQ.mp4",
-  "https://i.imgur.com/ETZGTCV.mp4",
-  "https://i.imgur.com/YW5tJfw.mp4",
-  "https://i.imgur.com/oW1F7fi.mp4",
-  "https://i.imgur.com/XVjZtQi.mp4",
   "https://i.imgur.com/3jLqzJh.mp4",
-  "https://i.imgur.com/R3rq4vY.mp4",
-  "https://i.imgur.com/5Rm8cRz.mp4"
+  "https://i.imgur.com/F2OErqQ.mp4",
+  "https://i.imgur.com/W6YciZm.mp4",
+  "https://i.imgur.com/Zv6dGRf.mp4",
+  "https://i.imgur.com/kGhZq6K.mp4",
+  "https://i.imgur.com/oW1F7fi.mp4",
+  "https://i.imgur.com/5Rm8cRz.mp4",
+  "https://i.imgur.com/YW5tJfw.mp4",
+  "https://i.imgur.com/ETZGTCV.mp4",
+  "https://i.imgur.com/XVjZtQi.mp4",
+  "https://i.imgur.com/9GO9fXk.mp4"
 ];
 
 function borderStyle(text) {
@@ -52,21 +63,27 @@ module.exports.run = async function({ api, event }) {
   const videoUrl = media[Math.floor(Math.random() * media.length)];
   const borderedText = borderStyle(reply);
 
-  // Send text first
-  api.sendMessage(borderedText, event.threadID, async () => {
-    try {
-      const res = await axios.get(videoUrl, { responseType: "stream" });
-      const filePath = path.join(__dirname, "temp.mp4");
-      const writer = fs.createWriteStream(filePath);
-      res.data.pipe(writer);
-      writer.on("finish", () => {
+  const tempPath = path.join(__dirname, `bhutni_temp_${Date.now()}.mp4`);
+
+  try {
+    const res = await axios.get(videoUrl, { responseType: "stream" });
+    const writer = fs.createWriteStream(tempPath);
+    res.data.pipe(writer);
+
+    writer.on("finish", () => {
+      api.sendMessage(borderedText, event.threadID, () => {
         api.sendMessage({
-          body: "👻 भूतनी का साक्षात्कार!",
-          attachment: fs.createReadStream(filePath)
-        }, event.threadID, () => fs.unlinkSync(filePath));
+          body: "👻 भूतनी की एंट्री हो चुकी है!",
+          attachment: fs.createReadStream(tempPath)
+        }, event.threadID, () => fs.unlinkSync(tempPath));
       });
-    } catch (e) {
-      api.sendMessage("⚠️ वीडियो लोड करने में दिक्कत आई!", event.threadID);
-    }
-  });
+    });
+
+    writer.on("error", () => {
+      api.sendMessage("❌ वीडियो सेव नहीं हो सकी! 😢", event.threadID);
+    });
+  } catch (err) {
+    console.error(err);
+    api.sendMessage("❌ वीडियो भेजने में दिक्कत आ गई! 😭", event.threadID);
+  }
 };

@@ -1,3 +1,7 @@
+const axios = require("axios");
+const fs = require("fs-extra");
+const path = require("path");
+
 module.exports.config = {
   name: "bhoot",
   version: "1.0",
@@ -41,17 +45,7 @@ const media = [
   "https://i.imgur.com/W6YciZm.mp4",
   "https://i.imgur.com/qJfQciY.mp4",
   "https://i.imgur.com/NHd2xNV.mp4",
-  "https://i.imgur.com/R3rq4vY.mp4",
-  "https://i.imgur.com/C2nXpcy.mp4",
-  "https://i.imgur.com/7JGhvqM.mp4",
-  "https://i.imgur.com/oW1F7fi.mp4",
-  "https://i.imgur.com/3jLqzJh.mp4",
-  "https://i.imgur.com/F2OErqQ.mp4",
-  "https://i.imgur.com/YW5tJfw.mp4",
-  "https://i.imgur.com/ETZGTCV.mp4",
-  "https://i.imgur.com/XVjZtQi.mp4",
-  "https://i.imgur.com/9GO9fXk.mp4",
-  "https://i.imgur.com/FgJ7xqy.mp4"
+  "https://i.imgur.com/R3rq4vY.mp4"
 ];
 
 function borderStyle1(text) {
@@ -59,21 +53,40 @@ function borderStyle1(text) {
   return `╔${border}╗\n║  ${text}  ║\n╚${border}╝`;
 }
 
+async function getStreamFromURL(url) {
+  const tempPath = path.join(__dirname, "temp_bhoot.mp4");
+  const response = await axios({
+    method: "GET",
+    url: url,
+    responseType: "stream"
+  });
+
+  return new Promise((resolve, reject) => {
+    const writer = fs.createWriteStream(tempPath);
+    response.data.pipe(writer);
+    writer.on("finish", () => resolve(fs.createReadStream(tempPath)));
+    writer.on("error", reject);
+  });
+}
+
 module.exports.run = async function({ api, event }) {
-  const msg = event.body.toLowerCase();
+  const msg = event.body?.toLowerCase();
   const triggers = ["bhoot", "bhut", "भूत"];
-  if (!triggers.some(w => msg.includes(w))) return;
+  if (!msg || !triggers.some(w => msg.includes(w))) return;
 
   const reply = replies[Math.floor(Math.random() * replies.length)];
   const video = media[Math.floor(Math.random() * media.length)];
   const borderedReply = borderStyle1(reply);
 
-  api.sendMessage(borderedReply, event.threadID, () => {
-    setTimeout(() => {
+  api.sendMessage(borderedReply, event.threadID, async () => {
+    try {
+      const stream = await getStreamFromURL(video);
       api.sendMessage({
         body: "👻 भूत का साक्षात्कार!",
-        attachment: global.utils.getStreamFromURL(video)
+        attachment: stream
       }, event.threadID);
-    }, 1200);
+    } catch (err) {
+      api.sendMessage("❌ वीडियो भेजने में दिक्कत आ गई!", event.threadID);
+    }
   });
 };

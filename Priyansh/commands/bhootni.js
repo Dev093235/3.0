@@ -3,50 +3,46 @@ const fs = require("fs-extra");
 const path = require("path");
 
 module.exports.config = {
-  name: "bhutni",
-  version: "1.2",
+  name: "bhootni",
+  version: "3.7",
   hasPermssion: 0,
   credits: "Rudra",
-  description: "भूतनी की वीडियो और डरावनी बात",
+  description: "Bhoot ya Bhootni wali image aur message bhejta hai",
   commandCategory: "fun",
+  usages: "bhootni | bhoot",
   cooldowns: 5
 };
 
-const replies = [
-  "💃 भूतनी आई और तुझे घूर रही है!",
-  "👻 अब तेरी रातों की नींद उड़ गई!",
-  "😈 भूतनी तेरे सपनों में आने वाली है!",
-  "🧟‍♀️ देख पीछे... भूतनी खड़ी है!",
-  "🌑 अब तेरा सामना भूतनी से होगा!",
-  "🕯️ भूतनी की सांसें तेरे कानों में गूंज रही हैं!",
-  "💀 तुझे भूतनी पसंद है ना? अब भुगत!",
-  "👁️‍🗨️ भूतनी तेरे दिमाग में बैठ गई!",
-  "🔮 रात को खिड़की मत खोलना... भूतनी झाँकेगी!",
-  "🕷️ धीरे बोल... भूतनी सुन रही है!",
-  "😨 तेरी चीख अब सिर्फ भूतनी को सुनाई देगी!",
-  "🖤 अब तेरा पीछा नहीं छोड़ेगी वो!",
-  "👹 साया उसका तेरे साथ आ गया है!",
-  "🔥 तू जलेगा उसकी नज़र से!",
-  "⚰️ तेरी रूह अब उसके कब्ज़े में है!",
-  "🦴 डर का दूसरा नाम है भूतनी!",
-  "🔪 तेरे पीछे कोई चल रहा है... देख!",
-  "👣 वो हर कदम पे तेरे साथ है!",
-  "🌪️ भूतनी का तूफ़ान आया है!",
-  "😱 अब तेरा बचना नामुमकिन है!"
+const femaleReplies = [
+  "😨 Bhutni aayi aur seedha aankhon me dekh rahi hai!",
+  "👻 Bhutni tere bed ke neeche chup ke baithi hai!",
+  "💃 Bhutni bole – aaj raat sirf main aur tu!",
+  "🩸 Sapna nahi, asli bhutni aayi hai!",
+  "🌑 Bhutni ka mood kharab hai... sambhal ja!"
 ];
 
-const media = [
-  "https://i.imgur.com/3jLqzJh.mp4",
-  "https://i.imgur.com/F2OErqQ.mp4",
-  "https://i.imgur.com/W6YciZm.mp4",
-  "https://i.imgur.com/Zv6dGRf.mp4",
-  "https://i.imgur.com/kGhZq6K.mp4",
-  "https://i.imgur.com/oW1F7fi.mp4",
-  "https://i.imgur.com/5Rm8cRz.mp4",
-  "https://i.imgur.com/YW5tJfw.mp4",
-  "https://i.imgur.com/ETZGTCV.mp4",
-  "https://i.imgur.com/XVjZtQi.mp4",
-  "https://i.imgur.com/9GO9fXk.mp4"
+const maleReplies = [
+  "☠️ Bhai bhag! Bhoot saamne khada hai!",
+  "🧟‍♂️ Bhoot bola – teri band bajane aaya hoon!",
+  "👁️‍🗨️ Uski aankhon mein dekha kya? Bhoot tha wo!",
+  "👻 Raat ke 3 baje... aur bhoot ne tujhe yaad kiya!",
+  "🕷️ Bhoot ne kaha – game over, beta!"
+];
+
+const femaleImages = [
+  "https://i.imgur.com/1hrTkfK.jpg",
+  "https://i.imgur.com/FDS9zW0.jpg",
+  "https://i.imgur.com/h4NSjRo.jpg",
+  "https://i.imgur.com/Ay8y2no.jpg",
+  "https://i.imgur.com/OLpWJmZ.jpg"
+];
+
+const maleImages = [
+  "https://i.imgur.com/N10qg3m.jpg",
+  "https://i.imgur.com/Db3EfrB.jpg",
+  "https://i.imgur.com/pmdscfG.jpg",
+  "https://i.imgur.com/XnGZHKq.jpg",
+  "https://i.imgur.com/LWfgopg.jpg"
 ];
 
 function borderStyle(text) {
@@ -54,36 +50,47 @@ function borderStyle(text) {
   return `╔${border}╗\n║  ${text}  ║\n╚${border}╝`;
 }
 
-module.exports.run = async function({ api, event }) {
-  const msg = event.body.toLowerCase();
-  const triggers = ["bhutni", "bhootni", "भूतनी"];
-  if (!triggers.some(t => msg.includes(t))) return;
+module.exports.handleEvent = async function ({ api, event }) {
+  const msg = event.body?.toLowerCase();
+  if (!msg) return;
 
-  const reply = replies[Math.floor(Math.random() * replies.length)];
-  const videoUrl = media[Math.floor(Math.random() * media.length)];
+  const isFemale = ["bhutni", "bhootni", "भूतनी"].some(t => msg.includes(t));
+  const isMale = ["bhoot", "bhuut", "भूत"].some(t => msg.includes(t));
+
+  if (!isFemale && !isMale) return;
+
+  const reply = isFemale
+    ? femaleReplies[Math.floor(Math.random() * femaleReplies.length)]
+    : maleReplies[Math.floor(Math.random() * maleReplies.length)];
+
+  const imageUrl = isFemale
+    ? femaleImages[Math.floor(Math.random() * femaleImages.length)]
+    : maleImages[Math.floor(Math.random() * maleImages.length)];
+
   const borderedText = borderStyle(reply);
-
-  const tempPath = path.join(__dirname, `bhutni_temp_${Date.now()}.mp4`);
+  const tempPath = path.join(__dirname, `ghost_temp_${Date.now()}.jpg`);
 
   try {
-    const res = await axios.get(videoUrl, { responseType: "stream" });
+    const res = await axios.get(imageUrl, { responseType: "stream" });
     const writer = fs.createWriteStream(tempPath);
     res.data.pipe(writer);
-
     writer.on("finish", () => {
       api.sendMessage(borderedText, event.threadID, () => {
         api.sendMessage({
-          body: "👻 भूतनी की एंट्री हो चुकी है!",
+          body: isFemale
+            ? "👻 Bhutni ki entry ho chuki hai!"
+            : "💀 Bhoot ab tera peecha nahi chhodega!",
           attachment: fs.createReadStream(tempPath)
         }, event.threadID, () => fs.unlinkSync(tempPath));
       });
     });
-
-    writer.on("error", () => {
-      api.sendMessage("❌ वीडियो सेव नहीं हो सकी! 😢", event.threadID);
-    });
-  } catch (err) {
-    console.error(err);
-    api.sendMessage("❌ वीडियो भेजने में दिक्कत आ गई! 😭", event.threadID);
+  } catch (e) {
+    console.error(e);
+    api.sendMessage("❌ Bhai dikkat aa gayi image bhejne me! 😭", event.threadID);
   }
+};
+
+module.exports.run = async function ({ api, event }) {
+  event.body = event.body || "";
+  return this.handleEvent({ api, event });
 };

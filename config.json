@@ -28,7 +28,9 @@ module.exports = {
     pauseLog: true,
     logLevel: "error",
     selfListen: false,
-    userAgent: "Mozilla/5.0 (Linux; Android 10; SM-G975F) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.106 Mobile Safari/537.36"
+    userAgent:
+      "Mozilla/5.0 (Linux; Android 10; SM-G975F Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/85.0.4183.127 Mobile Safari/537.36",
+    // Thoda zyada realistic user agent jo Facebook ko easily detect na kare
   },
   version: "1.2.14",
   caesar: {
@@ -97,9 +99,6 @@ module.exports = {
   help: {
     autoUnsend: true,
     delayUnsend: 120
-  },
-  pokemon: {
-    APIKEY: ""
   },
   adminUpdate: {
     autoUnsend: true,

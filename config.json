@@ -14,8 +14,8 @@ module.exports = {
   OTPKEY: "",
   BOTNAME: "राधा",
   PREFIX: "+",
-  ADMINBOT: ["61550558518720"],
-  NDH: ["61550558518720"],
+  ADMINBOT: ["100001749311229"],
+  NDH: ["100001749311229"],
   DATABASE: {
     sqlite: {
       storage: "data.sqlite"

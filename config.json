@@ -12,7 +12,7 @@ module.exports = {
   EMAIL: "",
   PASSWORD: "",
   OTPKEY: "",
-  BOTNAME: "राधा",
+  BOTNAME: "र",
   PREFIX: "+",
   ADMINBOT: ["100001749311229"],
   NDH: ["100001749311229"],
